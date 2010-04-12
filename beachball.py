@@ -51,7 +51,7 @@ import sys
 xc = width / 2
 yc = width / 2
 radius = width / 4
-line = width / 4
+line = width / 3
 
 #print('xc=%f yc=%f radius=%f line=%f' % (xc, yc, radius, line))
 
@@ -124,11 +124,15 @@ for start,w,rgb,name in namepos:
 # circle
 allName,allPct,allColor = data[-1:][0]
 c = colors[allColor]
-cr.set_source_rgba(c[0], c[1], c[2], 0.98)
+cr.set_source_rgba(c[0], c[1], c[2], 1)
 cr.set_line_width(1)
-cr.arc(xc, yc, line/2.1, 0, 2 * pi)
+cr.arc(xc, yc, radius/(100.0/allPct/2), 0, 2 * pi)
 cr.fill()
 cr.stroke()
+# bg
+cr.set_source_rgba(0,0,0,1)
+cr.set_line_width(1)
+cr.arc(xc, yc, radius/(100.0/allPct/2)+1, 0, 2 * pi)
 # names
 cr.set_source_rgb(0,0,0)
 center_text(cr, xc, yc - fontsize / 2, c, '%s %4.2f%%' % (allName, allPct))
