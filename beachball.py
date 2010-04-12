@@ -74,10 +74,9 @@ def set_text_color(cr, bgrgb):
 		cr.set_source_rgb(0, 0, 0)
 
 # set up
-surface = cairo.SVGSurface(filename + '.svg', width, height)
+surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, int(width), int(height))
 
 cr = cairo.Context(surface)
-
 cr.select_font_face(fontname)
 cr.set_font_size(fontsize)
 
