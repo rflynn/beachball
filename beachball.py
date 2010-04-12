@@ -131,7 +131,7 @@ cr.set_line_width(1)
 cr.arc(xc, yc, radius/(100.0/allPct/2), 0, 2 * pi)
 cr.fill()
 cr.stroke()
-# bg
+# border
 cr.set_source_rgba(0,0,0,1)
 cr.set_line_width(1)
 cr.arc(xc, yc, radius/(100.0/allPct/2)+1, 0, 2 * pi)
