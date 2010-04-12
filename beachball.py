@@ -1,14 +1,16 @@
 #!/usr/bin/env python
 # ex: set ts=8 noet:
+#
 # Ryan 'pizza' Flynn (http://parseerror.com/)
+#
 # display Venn-diagram data in a "beachball" format, yuck!
-# don't blame me, blame
+# don't blame me, blame Ben Fry by way of unquietwiki
 # <URL: http://www.reddit.com/r/SomebodyMakeThis/comments/bpb0y/smt_a_beach_ball_chart_maker/ >
-# generates beachball.svg and beachball.png files
-# required:
-# python (http://python.org)
-# cairo (http://cairographics.org)
-# py2cairo (http://cairographics.org/pycairo/)
+#
+# Requirements:
+# 	python (http://python.org)
+# 	cairo (http://cairographics.org)
+# 	py2cairo (http://cairographics.org/pycairo/)
 # 
 # enter your data here
 # ('NameX NameY', Pct, Color)
