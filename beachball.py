@@ -32,13 +32,13 @@ fontsize = 20
 fontname = "Times New Roman"
 
 colors = { # available colors: 'color' : (r, g, b)
-	'black': (0x00, 0x00, 0x00),
-	'white': (0xff, 0xff, 0xff),
-	'yellow':(0xf0, 0xde, 0x00),
-	'green': (0x00, 0xbc, 0x00),
-	'red':	 (0xc5, 0x00, 0x00),
-	'gray':	 (0xce, 0xcf, 0xcd),
-	'blue':	 (0x00, 0x00, 0xc2),
+	'black': (0.0, 0.0, 0.0),
+	'white': (1.0, 1.0, 1.0),
+	'yellow':(1.0, 1.0, 0.0),
+	'green': (0.0, 0.8, 0.0),
+	'red':	 (0.8, 0.0, 0.0),
+	'gray':	 (0.9, 0.9, 0.9),
+	'blue':	 (0.0, 0.0, 0.9),
 }
 
 #####################################################
@@ -68,7 +68,7 @@ def center_text(cr, x, y, bgrgb, names):
 
 # figure out whether the fg color should be black or white based on bg color
 def set_text_color(cr, bgrgb):
-	if sum(bgrgb) < 0xff and max(bgrgb) <= 0xd0 and not (sum(bgrgb) == bgrgb[1]): # sufficiently dark
+	if sum(bgrgb) < 1 and max(bgrgb) <= 0.9 and not (sum(bgrgb) == bgrgb[1]): # sufficiently dark
 		cr.set_source_rgb(1, 1, 1)
 	else:
 		cr.set_source_rgb(0, 0, 0)
@@ -107,7 +107,7 @@ for i in range(len(data)-1):
 	if i == 0: # first arc display center top
 		start = 270 - w/2
 	# draw arc
-	cr.set_source_rgba(c[0], c[1], c[2], 0.98)
+	cr.set_source_rgba(c[0], c[1], c[2], 1)
 	cr.arc(xc, yc, radius, radians(start), radians(start + w))
 	cr.stroke()
 	# calc name
