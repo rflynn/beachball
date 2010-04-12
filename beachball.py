@@ -30,8 +30,17 @@ data = [
 filename = 'beachball'
 width = 500.0
 height = 500.0
-fontsize = 20
 fontname = "Times New Roman"
+
+#####################################################
+
+# secondary data
+isize = min([width,height])
+fontsize = isize / 25 # scale fontsize accordingly
+xc = isize / 2
+yc = isize / 2
+radius = isize / 4
+line = isize / 3
 
 colors = { # available colors: 'color' : (r, g, b)
 	'black': (0.0, 0.0, 0.0),
@@ -43,17 +52,9 @@ colors = { # available colors: 'color' : (r, g, b)
 	'blue':	 (0.0, 0.0, 0.9),
 }
 
-#####################################################
-
 import cairo
 from math import pi,radians,sin,cos
 import sys
-
-# secondary data
-xc = width / 2
-yc = width / 2
-radius = width / 4
-line = width / 3
 
 #print('xc=%f yc=%f radius=%f line=%f' % (xc, yc, radius, line))
 
@@ -149,4 +150,6 @@ cr.stroke()
 # save
 surface.write_to_png(filename + '.png')
 surface.finish()
+
+print('wrote %s.png' % (filename))
 
