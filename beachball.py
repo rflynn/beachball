@@ -13,6 +13,8 @@
 # enter your data here
 # ('NameX NameY', Pct, Color)
 # whatever Pct is left over is considered 'None'
+
+# original data
 data = [
 	('Palin',		 10.36, 'yellow'),
 	('Palin Romney',	 15.54, 'green' ),
@@ -22,6 +24,7 @@ data = [
 	('Huckabee Palin',	 11.34, 'blue'  ),
 	('Huckabee Palin Romney',26.46, 'yellow'), # 'All', center
 ]
+
 filename = 'beachball'
 width = 500.0
 height = 500.0
@@ -29,6 +32,8 @@ fontsize = 20
 fontname = "Times New Roman"
 
 colors = { # available colors: 'color' : (r, g, b)
+	'black': (0x00, 0x00, 0x00),
+	'white': (0xff, 0xff, 0xff),
 	'yellow':(0xf0, 0xde, 0x00),
 	'green': (0x00, 0xbc, 0x00),
 	'red':	 (0xc5, 0x00, 0x00),
@@ -50,7 +55,9 @@ line = width / 4
 
 #print('xc=%f yc=%f radius=%f line=%f' % (xc, yc, radius, line))
 
-def center_text(cr, x, y, names):
+# display centered text as given position
+def center_text(cr, x, y, bgrgb, names):
+	set_text_color(cr, bgrgb)
 	y -= fontsize / 2 # HACK
 	for n in names.split(' '):
 		_, _, width, height, _, _ = cr.text_extents(n)
@@ -58,6 +65,13 @@ def center_text(cr, x, y, names):
 		cr.show_text(n)
 		cr.stroke()
 		y += height + 4
+
+# figure out whether the fg color should be black or white based on bg color
+def set_text_color(cr, bgrgb):
+	if sum(bgrgb) < 0xff and max(bgrgb) <= 0xd0 and not (sum(bgrgb) == bgrgb[1]): # sufficiently dark
+		cr.set_source_rgb(1, 1, 1)
+	else:
+		cr.set_source_rgb(0, 0, 0)
 
 # set up
 surface = cairo.SVGSurface(filename + '.svg', width, height)
@@ -97,15 +111,14 @@ for i in range(len(data)-1):
 	cr.arc(xc, yc, radius, radians(start), radians(start + w))
 	cr.stroke()
 	# calc name
-	namepos.append((start, w, name + ' %4.2f%%' % (pct)))
+	namepos.append((start, w, c, name + ' %4.2f%%' % (pct)))
 	# loop
 	start += w + 1
 
-cr.set_source_rgb(0,0,0)
-for start,w,name in namepos:
+for start,w,rgb,name in namepos:
 	x = xc + cos(radians(start + w/2)) * radius
 	y = yc + sin(radians(start + w/2)) * radius
-	center_text(cr, x, y, name)
+	center_text(cr, x, y, rgb, name)
 
 # draw center
 # circle
@@ -118,7 +131,7 @@ cr.fill()
 cr.stroke()
 # names
 cr.set_source_rgb(0,0,0)
-center_text(cr, xc, yc - fontsize / 2, '%s %4.2f%%' % (allName, allPct))
+center_text(cr, xc, yc - fontsize / 2, c, '%s %4.2f%%' % (allName, allPct))
 
 # display "None" in corner
 nonePct = 100.0 - pctMinusAll - allPct
