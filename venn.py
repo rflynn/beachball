@@ -3,7 +3,7 @@
 #
 # Ryan 'pizza' Flynn (http://parseerror.com/)
 #
-# venn-diagram generator for 2,3,4 items
+# generate symmetrical Venn diagrams for 2,3,4 items
 
 circles = [
 	('Palin',		10.36, 'red'  ),
@@ -69,67 +69,42 @@ cr.rectangle(0, 0, width, height)
 cr.fill()
 cr.stroke()
 
+# return (cos, sin) tuple
+def cossin(xc, yc, deg, rad):
+	return (xc + cos(radians(deg)) * rad, \
+		yc + sin(radians(deg)) * rad)
+
 start = 90
-w = 360.0 / len(circles)
+w = 360.0 / len(circles) # degrees in layout circle to each circle...
 # draw circles
 for name,pct,c in circles:
 	# bg color
 	c = colors[c]
 	cr.set_source_rgba(c[0], c[1], c[2], 0.4)
 	# draw circle
-	x = xc + cos(radians(start + w/2)) * (radius * 0.75)
-	y = yc + sin(radians(start + w/2)) * (radius * 0.75)
+	x,y = cossin(xc, yc, start + w/2, radius * 0.75)
 	cr.arc(x, y, radius, 0, 2*pi)
 	cr.fill()
 	cr.stroke()
 	# circle label
-	x = xc + cos(radians(start + w/2)) * (radius * 0.9)
-	y = yc + sin(radians(start + w/2)) * (radius * 0.9)
+	x,y = cossin(xc, yc, start + w/2, radius * 0.9)
 	center_text(cr, x, y, colors['black'], '%s %4.2f%%' % (name, pct))
 	# loop
 	start += w
 
+# label overlapping regions
 if len(circles) > 2:
-	# label overlapping regions
-	start = 90 + w/2
-	for i,j in zip(range(len(circles)), range(1, len(circles))+[0]):
+	start = 90 + w/2 # offset 1/2 of circles start
+	for i,j in [(i, (i+1) % len(circles)) for i in range(len(circles))]:
+		x,y = cossin(xc, yc, start + w/2, radius * 0.5)
 		pct = overlap['%s %s' % (circles[i][0], circles[j][0])]
-		x = xc + cos(radians(start + w/2)) * (radius * 0.5)
-		y = yc + sin(radians(start + w/2)) * (radius * 0.5)
 		center_text(cr, x, y, colors['black'], '%4.2f%%' % (pct))
 		start += w
 
-# label center
+# label center region
 allkey = ' '.join([name for name,_,_ in circles])
 pct = overlap[allkey]
 center_text(cr, xc, yc, colors['white'], '%4.2f%%' % (pct))
-
-"""
-# draw center
-# circle
-allName,allPct,allColor = data[-1:][0]
-c = colors[allColor]
-cr.set_source_rgba(c[0], c[1], c[2], 1)
-cr.set_line_width(1)
-cr.arc(xc, yc, radius/(100.0/allPct/2), 0, 2 * pi)
-cr.fill()
-cr.stroke()
-# border
-cr.set_source_rgba(0,0,0,1)
-cr.set_line_width(1)
-cr.arc(xc, yc, radius/(100.0/allPct/2)+1, 0, 2 * pi)
-# names
-cr.set_source_rgb(0,0,0)
-center_text(cr, xc, yc - fontsize / 2, c, '%s %4.2f%%' % (allName, allPct))
-
-# display "None" in corner
-nonePct = 100.0 - pctMinusAll - allPct
-noneText = 'None %4.2f%%' % (nonePct)
-_, _, noneWidth, noneHeight, _, _ = cr.text_extents(noneText)
-cr.move_to(width - noneWidth - 20, height - noneHeight - 10)
-cr.show_text(noneText)
-cr.stroke()
-"""
 
 # save
 surface.write_to_png(filename + '.png')
