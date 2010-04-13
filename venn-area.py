@@ -31,7 +31,7 @@ fontname = 'Times New Roman'
 isize = min([width,height])
 xc = isize / 2
 yc = isize / 2
-radius = isize / 2
+radius = isize / 1.5
 maxfontsize = isize / 10
 
 colors = { # available colors: 'color' : (r, g, b)
@@ -50,7 +50,7 @@ from math import pi,radians,sin,cos,sqrt
 def scale_fontsize(pct):
 	global maxfontsize
 	# fontsize effects two axis, so we need sqrt to balance area
-	return sqrt(maxfontsize * (pct / 100) * 36)
+	return sqrt(maxfontsize * (pct / 100)) * 8
 
 # display centered text as given position
 def center_text(cr, x, y, c, names, pct):
@@ -86,7 +86,7 @@ def cossin(xc, yc, deg, rad):
 # 
 def scale_radius(pct):
 	global isize
-	return sqrt(isize * (pct / 100)) * 6
+	return sqrt(isize * (pct / 100)) * 9
 
 w = 360.0 / len(circles) # degrees in layout circle to each circle...
 
@@ -141,16 +141,16 @@ start = 90
 for name,pct,c in circles:
 	# bg color
 	c = colors[c]
-	cr.set_source_rgba(c[0], c[1], c[2], 1)
+	cr.set_source_rgba(c[0], c[1], c[2], 0.9)
 	# draw circle
-	x,y = cossin(xc, yc, start + w/2, radius * 0.75)
+	x,y = cossin(xc, yc, start + w/2, radius * 0.5)
 	cr.stroke()
 	# circle
 	cr.arc(x, y, scale_radius(pct), 0, 2*pi)
 	cr.fill()
 	cr.stroke()
 	# circle label
-	x,y = cossin(xc, yc, start + w/2, radius * 0.75)
+	x,y = cossin(xc, yc, start + w/2, radius * 0.5)
 	center_text(cr, x, y, colors['white'], '%s %4.2f%%' % (name, pct), pct)
 	# loop
 	start += w
