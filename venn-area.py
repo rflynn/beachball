@@ -38,9 +38,9 @@ colors = { # available colors: 'color' : (r, g, b)
 	'black': (0.0, 0.0, 0.0),
 	'white': (1.0, 1.0, 1.0),
 	'gray':  (0.9, 0.9, 0.9),
-	'red':	 (1.0, 0.0, 0.0),
-	'green': (0.0, 1.0, 0.0),
-	'blue':	 (0.0, 0.0, 1.0),
+	'red':	 (0.9, 0.0, 0.0),
+	'green': (0.0, 0.7, 0.0),
+	'blue':	 (0.0, 0.0, 0.9),
 	'yellow':(1.0, 1.0, 0.0),
 }
 
@@ -88,6 +88,22 @@ def scale_radius(pct):
 	global isize
 	return sqrt(isize * (pct / 100)) * 6
 
+w = 360.0 / len(circles) # degrees in layout circle to each circle...
+
+# draw connecting lines
+"""
+start = 90
+cr.set_source_rgba(0.5, 0.5, 0.5, 0.3)
+for i in range(len(circles)):
+	# bg arc
+	x,y = cossin(xc, yc, start + w/2, radius * 0.75)
+	bgx,bgy = cossin(xc, yc, start + w + w/2, radius * 0.75)
+	cr.move_to(x, y)
+	cr.line_to(bgx, bgy)
+	start += w
+cr.stroke()
+"""
+
 # label center region
 allkey = ' '.join([name for name,_,_ in circles])
 pct = overlap[allkey]
@@ -102,8 +118,6 @@ for name,_,c in circles:
 	alpha *= 0.8
 center_text(cr, xc, yc, colors['white'], 'All %4.2f%%' % (pct), pct)
 
-w = 360.0 / len(circles) # degrees in layout circle to each circle...
-
 # label overlapping regions
 if len(circles) > 2:
 	start = 90 + w/2 # offset 1/2 of circles start
@@ -115,11 +129,11 @@ if len(circles) > 2:
 		for _,_,c in [circles[i], circles[j]]:
 			c = colors[c]
 			cr.set_source_rgba(c[0], c[1], c[2], 0.5)
-			cr.arc(x+i, y, scale_radius(pct), 0, 2*pi)
+			cr.arc(x, y, scale_radius(pct), 0, 2*pi)
 			cr.fill()
 		cr.stroke()
 		# text
-		center_text(cr, x, y, colors['black'], '%s %4.2f%%' % (names, pct), pct)
+		center_text(cr, x, y, colors['white'], '%s %4.2f%%' % (names, pct), pct)
 		start += w
 
 start = 90
@@ -127,15 +141,17 @@ start = 90
 for name,pct,c in circles:
 	# bg color
 	c = colors[c]
-	cr.set_source_rgba(c[0], c[1], c[2], 0.7)
+	cr.set_source_rgba(c[0], c[1], c[2], 1)
 	# draw circle
 	x,y = cossin(xc, yc, start + w/2, radius * 0.75)
+	cr.stroke()
+	# circle
 	cr.arc(x, y, scale_radius(pct), 0, 2*pi)
 	cr.fill()
 	cr.stroke()
 	# circle label
 	x,y = cossin(xc, yc, start + w/2, radius * 0.75)
-	center_text(cr, x, y, colors['black'], '%s %4.2f%%' % (name, pct), pct)
+	center_text(cr, x, y, colors['white'], '%s %4.2f%%' % (name, pct), pct)
 	# loop
 	start += w
 
