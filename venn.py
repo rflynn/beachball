@@ -37,6 +37,7 @@ radius = isize / 3.75
 colors = { # available colors: 'color' : (r, g, b)
 	'black': (0.0, 0.0, 0.0),
 	'white': (1.0, 1.0, 1.0),
+	'gray':  (0.6, 0.6, 0.6),
 	'red':	 (1.0, 0.0, 0.0),
 	'green': (0.0, 1.0, 0.0),
 	'blue':	 (0.0, 0.0, 1.0),
@@ -80,7 +81,7 @@ w = 360.0 / len(circles) # degrees in layout circle to each circle...
 for name,pct,c in circles:
 	# bg color
 	c = colors[c]
-	cr.set_source_rgba(c[0], c[1], c[2], 0.4)
+	cr.set_source_rgba(c[0], c[1], c[2], 0.7)
 	# draw circle
 	x,y = cossin(xc, yc, start + w/2, radius * 0.75)
 	cr.arc(x, y, radius, 0, 2*pi)
@@ -98,13 +99,13 @@ if len(circles) > 2:
 	for i,j in [(i, (i+1) % len(circles)) for i in range(len(circles))]:
 		x,y = cossin(xc, yc, start + w/2, radius * 0.5)
 		pct = overlap['%s %s' % (circles[i][0], circles[j][0])]
-		center_text(cr, x, y, colors['black'], '%4.2f%%' % (pct))
+		center_text(cr, x, y, colors['gray'], '%4.2f%%' % (pct))
 		start += w
 
 # label center region
 allkey = ' '.join([name for name,_,_ in circles])
 pct = overlap[allkey]
-center_text(cr, xc, yc, colors['white'], '%4.2f%%' % (pct))
+center_text(cr, xc, yc + (fontsize / 2), colors['white'], '%4.2f%%' % (pct))
 
 # save
 surface.write_to_png(filename + '.png')
