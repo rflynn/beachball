@@ -37,10 +37,11 @@ radius = isize / 3.75
 colors = { # available colors: 'color' : (r, g, b)
 	'black': (0.0, 0.0, 0.0),
 	'white': (1.0, 1.0, 1.0),
-	'gray':  (0.6, 0.6, 0.6),
+	'gray':  (0.8, 0.8, 0.8),
 	'red':	 (1.0, 0.0, 0.0),
 	'green': (0.0, 1.0, 0.0),
 	'blue':	 (0.0, 0.0, 1.0),
+	'yellow':(1.0, 1.0, 0.0),
 }
 
 import cairo, itertools
@@ -77,11 +78,13 @@ def cossin(xc, yc, deg, rad):
 
 start = 90
 w = 360.0 / len(circles) # degrees in layout circle to each circle...
+alpha = 0.8
 # draw circles
 for name,pct,c in circles:
 	# bg color
 	c = colors[c]
-	cr.set_source_rgba(c[0], c[1], c[2], 0.7)
+	cr.set_source_rgba(c[0], c[1], c[2], alpha)
+	alpha *= 0.8
 	# draw circle
 	x,y = cossin(xc, yc, start + w/2, radius * 0.75)
 	cr.arc(x, y, radius, 0, 2*pi)
